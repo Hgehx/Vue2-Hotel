@@ -1,21 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/views/Home'
 import UserLogin from '@/views/user/Login.vue'
 
 import Admin from '@/views/admin/Index.vue'
 import AdminLogin from '@/views/admin/login/Login.vue'
 import AdminHome from '@/views/admin/management/Home.vue'
-
+import AdminRoom from '@/views/admin/management/Room.vue'
+import AdminReservation from '@/views/admin/management/Reservation.vue'
+import AdminReview from '@/views/admin/management/Review.vue'
+import AdminBasicInfo from '@/views/admin/management/myAcc/BasicInfo.vue'
+import AdminEditAvatar from '@/views/admin/management/myAcc/EditAvatar.vue'
 Vue.use(VueRouter)
 
 // 定义路由
 const routes = [
-  {
-    path: '/home',
-    name: 'home',
-    component: Home
-  },
   {
     path: '/',
     name: 'login',
@@ -31,8 +29,28 @@ const routes = [
         component: AdminLogin
       },
       {
-        path: '',
+        path: '', // 后台首页
         component: AdminHome
+      },
+      {
+        path: 'room', // 客房管理
+        component: AdminRoom
+      },
+      {
+        path: 'resv', // 预定信息管理
+        component: AdminReservation
+      },
+      {
+        path: 'revi', // 用户评价管理
+        component: AdminReview
+      },
+      {
+        path: 'binfo', // 管理员基本信息
+        component: AdminBasicInfo
+      },
+      {
+        path: 'eavatar', // 修改头像
+        component: AdminEditAvatar
       }
     ]
   }
