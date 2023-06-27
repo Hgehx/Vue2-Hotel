@@ -12,4 +12,5 @@ router.delete('/user/deluser', user.deluser)
 
 //管理员信息
 router.get('/admin/login', admin.login)
+router.post('/admin/register', admin.register)
 module.exports = router

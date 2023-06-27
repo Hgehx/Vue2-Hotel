@@ -12,6 +12,7 @@
         :rules="loginFormRules"
         label-width="80px"
         v-show="!isRegisterFormVisible"
+        @keyup.enter.native="handleLogin"
       >
         <el-form-item label="用户名" prop="username">
           <el-input
@@ -29,7 +30,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="handleLogin">登录</el-button>
+          <el-button
+            type="primary"
+            @click="handleLogin"
+            :disabled="!canLoginSubmit"
+            >登录</el-button
+          >
           <el-button type="text" @click="toggleForm"
             >没有账号？立即注册</el-button
           >
@@ -45,6 +51,7 @@
         :rules="registerFormRules"
         label-width="80px"
         v-show="isRegisterFormVisible"
+        @keyup.enter.native="handleRegister"
       >
         <el-form-item label="用户名" prop="username">
           <el-input
@@ -77,7 +84,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="handleRegister">注册</el-button>
+          <el-button
+            type="primary"
+            @click="handleRegister"
+            :disabled="!canRegSubmit"
+            >注册</el-button
+          >
           <el-button type="text" @click="toggleForm"
             >已有账号？立即登录</el-button
           >
@@ -134,7 +146,8 @@ export default {
       this.$refs.loginFormRef.validate(valid => {
         if (valid) {
           const { username, password } = this.loginForm
-          console.log(username, password)
+
+          // console.log(username, password)
           // 处理登录逻辑
           this.$http
             .get('/admin/login', {
@@ -149,6 +162,8 @@ export default {
                   message: '登录成功',
                   type: 'success'
                 })
+                console.log(res.data)
+                localStorage.setItem('adminToken', res.data.token)
                 this.$router.push('/admin/')
               } else {
                 this.$message.error('账号或密码错误')
@@ -160,9 +175,27 @@ export default {
     handleRegister() {
       this.$refs.registerFormRef.validate(valid => {
         if (valid) {
-          const { username, password, confirmPassword } = this.registerForm
+          const { username, password } = this.registerForm
           // 处理注册逻辑
-          console.log('注册：', username, password, confirmPassword)
+          // console.log('注册：', username, password, confirmPassword)
+          this.$http
+            .post('/admin/register', {
+              aname: username,
+              password
+            })
+            .then(res => {
+              if (res.data.status == 200) {
+                this.$message({
+                  message: '注册成功，请前往登录',
+                  type: 'success'
+                })
+                this.isRegisterFormVisible = false
+                this.$refs.registerFormRef.resetFields()
+              } else {
+                // 可以判断用户名是否有相同的
+                this.$message.error(res.data.message)
+              }
+            })
         }
       })
     },
@@ -182,6 +215,17 @@ export default {
       } else {
         callback()
       }
+    }
+  },
+  computed: {
+    canLoginSubmit() {
+      const { username, password } = this.loginForm
+      return Boolean(username && password)
+    },
+    canRegSubmit() {
+      const { username, password, confirmPassword, secretKey } =
+        this.registerForm
+      return Boolean(username && password && confirmPassword && secretKey)
     }
   }
 }

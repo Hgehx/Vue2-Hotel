@@ -1,4 +1,4 @@
-let db = require('../db/index')
+const db = require('../db/index')
 
 // 测试服务器请求mysql数据
 exports.info = (req, res) => {
@@ -11,6 +11,7 @@ exports.info = (req, res) => {
   })
 }
 
+// 用户登录
 exports.login = (req, res) => {
   var sql = 'select * from user where username=?'
   db.query(sql, [req.query.username], (err, data) => {
@@ -39,7 +40,7 @@ exports.login = (req, res) => {
   })
 }
 
-// 添加用户
+// 用户注册
 exports.register = (req, res) => {
   let userinfo = req.body
 
