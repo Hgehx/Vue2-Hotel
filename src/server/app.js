@@ -9,6 +9,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors()) //配置跨域
 app.use(router) //配置路由
 
+const adminRoutes = require('./router/admin')
+app.use('/admin', adminRoutes)
+
 app.listen(80, () => {
   console.log('服务器启动成功')
 })

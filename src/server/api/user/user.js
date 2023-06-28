@@ -1,4 +1,4 @@
-const db = require('../db/index')
+const db = require('../../db/index')
 
 // 测试服务器请求mysql数据
 exports.info = (req, res) => {

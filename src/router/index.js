@@ -24,11 +24,6 @@ const routes = [
     component: Admin,
     children: [
       {
-        path: 'login',
-        name: 'adminLogin',
-        component: AdminLogin
-      },
-      {
         path: '', // 后台首页
         component: AdminHome
       },
@@ -53,6 +48,11 @@ const routes = [
         component: AdminEditAvatar
       }
     ]
+  },
+  {
+    path: '/admin/login',
+    name: 'adminLogin',
+    component: AdminLogin
   }
 ]
 

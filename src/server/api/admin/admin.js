@@ -1,6 +1,6 @@
-const db = require('../db/index')
+const db = require('../../db/index')
 const jwt = require('jsonwebtoken')
-const { secret } = require('./token/key')
+const { secret } = require('../token/key')
 const bcryptjs = require('bcryptjs')
 
 // 管理员登录

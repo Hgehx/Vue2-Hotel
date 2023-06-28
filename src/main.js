@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'default-passive-events'
 
 import axios from 'axios'
 // 全局配置 axios 的请求根路径

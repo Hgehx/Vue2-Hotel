@@ -142,16 +142,19 @@ export default {
     var myChart = echarts.init(chartDom)
     var option
     option = {
+      title: {
+        text: '客房余量'
+      },
       tooltip: {
         trigger: 'item'
       },
       legend: {
-        top: '5%',
+        top: '8%',
         left: 'center'
       },
       series: [
         {
-          name: 'Access From',
+          name: '余量',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -170,11 +173,11 @@ export default {
             show: false
           },
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
+            { value: 20, name: '双人床' },
+            { value: 14, name: '大床房' },
+            { value: 8, name: '海景房' },
+            { value: 12, name: '影视房' },
+            { value: 4, name: '高级大床房' }
           ]
         }
       ]
