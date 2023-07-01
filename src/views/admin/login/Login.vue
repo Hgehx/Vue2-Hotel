@@ -157,6 +157,8 @@ export default {
               }
             })
             .then(res => {
+              // 登录时判断数据库中用户头像是否存在，不存在设置默认头像
+              this.$store.dispatch('editAvatar/isToken')
               if (res.data.status == 200) {
                 this.$message({
                   message: '登录成功',

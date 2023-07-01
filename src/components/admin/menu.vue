@@ -12,29 +12,34 @@
         <div class="title">后台管理系统</div>
       </el-menu-item>
       <el-menu-item index="/admin/">
-        <i class="el-icon-s-home"></i>
+        <i class="iconfont icon-shouye"></i>
         <span slot="title">首页</span>
       </el-menu-item>
       <el-menu-item index="/admin/resv">
-        <i class="el-icon-tickets"></i>
+        <i class="iconfont icon-wodeyuyue"></i>
         <span slot="title">预定信息管理</span>
       </el-menu-item>
       <el-menu-item index="/admin/room">
-        <i class="el-icon-tickets"></i>
+        <i class="iconfont icon-fangjianweihu"></i>
         <span slot="title">客房评价管理</span>
       </el-menu-item>
       <el-menu-item index="/admin/revi">
-        <i class="el-icon-tickets"></i>
+        <i class="iconfont icon-pinglun"></i>
         <span slot="title">用户评价管理</span>
       </el-menu-item>
       <el-submenu index="1">
         <template slot="title">
-          <i class="el-icon-user"></i>
+          <i class="iconfont icon-yonghu"></i>
           <span slot="title">个人中心</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="/admin/binfo">基本信息</el-menu-item>
-          <el-menu-item index="/admin/eavatar">修改头像</el-menu-item>
+          <el-menu-item index="/admin/binfo">
+            <i class="iconfont icon-wodexinxi_jibenxinxi"></i
+            >基本信息</el-menu-item
+          >
+          <el-menu-item index="/admin/eavatar">
+            <i class="iconfont icon-xiugai"></i>修改头像</el-menu-item
+          >
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
@@ -59,6 +64,12 @@ export default {
     height: 55px;
     line-height: 55px;
     text-align: center;
+    color: #fff;
+  }
+  .iconfont {
+    margin-right: 10px;
+    margin-left: 5px;
+    font-size: 20px;
   }
   .el-menu {
     border-right: solid 0px #e6e6e6;

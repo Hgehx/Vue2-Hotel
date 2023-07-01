@@ -108,7 +108,7 @@
 import * as echarts from 'echarts'
 export default {
   name: 'AdminHome',
-  mounted() {
+  async mounted() {
     // 左侧柱状图
     var myChart1 = echarts.init(document.getElementById('echart'))
     // 指定图表的配置项和数据
@@ -120,16 +120,14 @@ export default {
         fontSize: 30
       },
       tooltip: {},
-      legend: {
-        data: ['入住数量']
-      },
+      legend: {},
       xAxis: {
         data: ['6月12日', '6月13日', '6月14日', '6月15日', '6月16日', '6月17日']
       },
       yAxis: {},
       series: [
         {
-          name: '数量',
+          name: '入住数量',
           type: 'bar',
           data: [5, 20, 36, 10, 14, 20]
         }

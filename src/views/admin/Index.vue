@@ -23,6 +23,20 @@ export default {
   components: {
     Menu,
     Header
+  },
+  async mounted() {
+    // 保证每个路由刷新的时候都会获取到最新的用户头像数据
+    // ps: 后期会整合简约逻辑
+    // 获取token，解析用户名
+    const { data: res } = await this.$http.get('/admin/getAvatar', {
+      headers: {
+        Authorization: localStorage.getItem('adminToken')
+      }
+    })
+    if (res.status === 200) {
+      this.$store.commit('editAvatar/adminAvatar', res.data.avatar)
+      this.$store.state.adminName = res.data.aname
+    }
   }
 }
 </script>
