@@ -21,7 +21,7 @@
       </el-menu-item>
       <el-menu-item index="/admin/room">
         <i class="iconfont icon-fangjianweihu"></i>
-        <span slot="title">客房评价管理</span>
+        <span slot="title">客房信息管理</span>
       </el-menu-item>
       <el-menu-item index="/admin/revi">
         <i class="iconfont icon-pinglun"></i>

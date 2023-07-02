@@ -5,7 +5,9 @@ import UserLogin from '@/views/user/Login.vue'
 import Admin from '@/views/admin/Index.vue'
 import AdminLogin from '@/views/admin/login/Login.vue'
 import AdminHome from '@/views/admin/management/Home.vue'
-import AdminRoom from '@/views/admin/management/Room.vue'
+import AdminRoom from '@/views/admin/management/room/Room.vue'
+import AdminRoomEdit from '@/views/admin/management/room/Edit.vue'
+import AdminRoomMore from '@/views/admin/management/room/More.vue'
 import AdminReservation from '@/views/admin/management/Reservation.vue'
 import AdminReview from '@/views/admin/management/Review.vue'
 import AdminBasicInfo from '@/views/admin/management/myAcc/BasicInfo.vue'
@@ -29,7 +31,16 @@ const routes = [
       },
       {
         path: 'room', // 客房管理
-        component: AdminRoom
+        component: AdminRoom,
+        children: []
+      },
+      {
+        path: 'roomedit', // 客房编辑
+        component: AdminRoomEdit
+      },
+      {
+        path: 'rmore', // 客房编辑
+        component: AdminRoomMore
       },
       {
         path: 'resv', // 预定信息管理
