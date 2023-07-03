@@ -5,6 +5,7 @@ const admin = require('../api/admin/admin')
 const resv = require('../api/admin/resv')
 const binfo = require('../api/admin/baseinfo')
 const room = require('../api/admin/room')
+const revi = require('../api/admin/revi')
 
 // 管理员登陆/注册
 router.get('/login', admin.login) //登陆
@@ -26,6 +27,10 @@ router.delete('/delRoom', room.delRoom) //删除
 router.post('/addMore', room.addMore) //新增客房信息
 router.get('/idMore', room.idMore) //指定id客房信息
 router.patch('/updateMore', room.updateMore) //修改介绍
+
+// 用户评价信息
+router.get('/reviInfo', revi.reviInfo) // 分页获取
+router.patch('/reviUpdate', revi.reviUpdate) //修改客房信息
 
 // 管理员个人信息
 router.patch('/updateAvatar', binfo.updateAvatar) //更换头像
