@@ -164,7 +164,7 @@ export default {
                   message: '登录成功',
                   type: 'success'
                 })
-                console.log(res.data)
+                // console.log(res.data)
                 localStorage.setItem('adminToken', res.data.token)
                 this.$router.push('/admin/')
               } else {

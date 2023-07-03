@@ -33,6 +33,9 @@ router.get('/reviInfo', revi.reviInfo) // 分页获取
 router.patch('/reviUpdate', revi.reviUpdate) //修改客房信息
 
 // 管理员个人信息
+router.get('/getInfo', binfo.getInfo) //获取个人信息
+router.patch('/updateInfo', binfo.updateInfo) //获取个人信息
+router.patch('/updatePwd', binfo.updatePwd) //修改密码
 router.patch('/updateAvatar', binfo.updateAvatar) //更换头像
 router.get('/getAvatar', binfo.getAvatar) //获取头像
 

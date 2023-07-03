@@ -12,6 +12,7 @@ import AdminReservation from '@/views/admin/management/Reservation.vue'
 import AdminReview from '@/views/admin/management/Review.vue'
 import AdminBasicInfo from '@/views/admin/management/myAcc/BasicInfo.vue'
 import AdminEditAvatar from '@/views/admin/management/myAcc/EditAvatar.vue'
+import AdminEditPassword from '@/views/admin/management/myAcc/EditPassword.vue'
 Vue.use(VueRouter)
 
 // 定义路由
@@ -24,39 +25,72 @@ const routes = [
   {
     path: '/admin',
     component: Admin,
+    meta: {
+      title: '后台'
+    },
     children: [
       {
         path: '', // 后台首页
-        component: AdminHome
+        component: AdminHome,
+        meta: {
+          title: '首页'
+        }
       },
       {
         path: 'room', // 客房管理
         component: AdminRoom,
-        children: []
+        meta: {
+          title: '客房管理'
+        }
       },
       {
         path: 'roomedit', // 客房编辑
-        component: AdminRoomEdit
+        component: AdminRoomEdit,
+        meta: {
+          title: '客房编辑'
+        }
       },
       {
-        path: 'rmore', // 客房编辑
-        component: AdminRoomMore
+        path: 'rmore', // 更多客房内容
+        component: AdminRoomMore,
+        meta: {
+          title: '更多客房内容'
+        }
       },
       {
         path: 'resv', // 预定信息管理
-        component: AdminReservation
+        component: AdminReservation,
+        meta: {
+          title: '预定信息管理'
+        }
       },
       {
         path: 'revi', // 用户评价管理
-        component: AdminReview
+        component: AdminReview,
+        meta: {
+          title: '用户评价管理'
+        }
       },
       {
         path: 'binfo', // 管理员基本信息
-        component: AdminBasicInfo
+        component: AdminBasicInfo,
+        meta: {
+          title: '管理员基本信息'
+        }
       },
       {
         path: 'eavatar', // 修改头像
-        component: AdminEditAvatar
+        component: AdminEditAvatar,
+        meta: {
+          title: '修改头像'
+        }
+      },
+      {
+        path: 'epassword', // 修改密码
+        component: AdminEditPassword,
+        meta: {
+          title: '修改密码'
+        }
       }
     ]
   },
@@ -90,6 +124,12 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+
+const originalPush = VueRouter.prototype.push
+
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 // 导出路由模块
 export default router

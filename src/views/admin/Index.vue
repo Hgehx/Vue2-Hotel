@@ -57,7 +57,7 @@ export default {
     .header {
       height: 55px;
       line-height: 55px;
-      background-color: #393d49;
+      background-color: #ffffff;
       color: #fff;
     }
     .content {

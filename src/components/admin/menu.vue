@@ -37,6 +37,9 @@
             <i class="iconfont icon-wodexinxi_jibenxinxi"></i
             >基本信息</el-menu-item
           >
+          <el-menu-item index="/admin/epassword">
+            <i class="iconfont icon-mima"></i>修改密码</el-menu-item
+          >
           <el-menu-item index="/admin/eavatar">
             <i class="iconfont icon-xiugai"></i>修改头像</el-menu-item
           >
@@ -64,7 +67,6 @@ export default {
     height: 55px;
     line-height: 55px;
     text-align: center;
-    color: #fff;
   }
   .iconfont {
     margin-right: 10px;
@@ -77,7 +79,7 @@ export default {
       font-size: 16px;
     }
     /deep/ .is-active {
-      background-color: #029688 !important;
+      background-color: #179688 !important;
     }
   }
 }

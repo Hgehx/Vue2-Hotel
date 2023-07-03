@@ -1,11 +1,17 @@
 <template>
   <div class="header">
     <div class="left">
-      <!-- 后续可能会添加面包屑 -->
-      <h3>面包屑</h3>
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item
+          :to="{ path: item.path }"
+          v-for="item in breadcrumbList"
+          :key="item.path"
+          >{{ item.meta.title }}</el-breadcrumb-item
+        >
+      </el-breadcrumb>
     </div>
     <div class="right">
-      <div></div>
+      <span>{{ $store.state.adminName }}</span>
       <!-- 下拉菜单 -->
       <el-dropdown
         @command="handleCommand"
@@ -31,6 +37,11 @@ export default {
   name: 'AdminHeader',
   data() {
     return {}
+  },
+  computed: {
+    breadcrumbList() {
+      return this.$route.matched
+    }
   },
   methods: {
     handleCommand(command) {
@@ -67,11 +78,19 @@ export default {
   align-items: center;
   line-height: 60px;
   height: 60px;
+  .left {
+    margin-left: 20px;
+  }
+
   .right {
     margin-right: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+    span {
+      color: #000;
+      margin-right: 10px;
+    }
     img {
       width: 50px;
       height: 50px;

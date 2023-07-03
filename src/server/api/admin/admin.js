@@ -18,6 +18,7 @@ exports.login = (req, res) => {
         message: '账号或密码错误'
       })
     } else {
+      // 解密密码和输入的密码进行判断
       let compareResult = bcryptjs.compareSync(password, data[0].password)
       if (compareResult) {
         // token设置
