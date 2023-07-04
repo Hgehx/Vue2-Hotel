@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <el-menu
+<<<<<<< HEAD
       :default-active="activeIndex"
+=======
+      :default-active="$route.name"
+>>>>>>> 6a391619599cd1b4eae84d2807838aba2767884f
       class="el-menu-vertical-demo"
       background-color="#393d49"
       text-color="#fff"
@@ -11,19 +15,19 @@
       <el-menu-item index="">
         <div class="title">后台管理系统</div>
       </el-menu-item>
-      <el-menu-item index="/admin/">
+      <el-menu-item index="home" :route="{ path: '/admin/' }">
         <i class="iconfont icon-shouye"></i>
         <span slot="title">首页</span>
       </el-menu-item>
-      <el-menu-item index="/admin/resv">
+      <el-menu-item index="resv" :route="{ path: '/admin/resv' }">
         <i class="iconfont icon-wodeyuyue"></i>
         <span slot="title">预定信息管理</span>
       </el-menu-item>
-      <el-menu-item index="/admin/room">
+      <el-menu-item index="room" :route="{ path: '/admin/room' }">
         <i class="iconfont icon-fangjianweihu"></i>
         <span slot="title">客房信息管理</span>
       </el-menu-item>
-      <el-menu-item index="/admin/revi">
+      <el-menu-item index="revi" :route="{ path: '/admin/revi' }">
         <i class="iconfont icon-pinglun"></i>
         <span slot="title">用户评价管理</span>
       </el-menu-item>
@@ -33,14 +37,14 @@
           <span slot="title">个人中心</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="/admin/binfo">
+          <el-menu-item index="binfo" :route="{ path: '/admin/binfo' }">
             <i class="iconfont icon-wodexinxi_jibenxinxi"></i
             >基本信息</el-menu-item
           >
-          <el-menu-item index="/admin/epassword">
+          <el-menu-item index="epassword" :route="{ path: '/admin/epassword' }">
             <i class="iconfont icon-mima"></i>修改密码</el-menu-item
           >
-          <el-menu-item index="/admin/eavatar">
+          <el-menu-item index="eavatar" :route="{ path: '/admin/eavatar' }">
             <i class="iconfont icon-xiugai"></i>修改头像</el-menu-item
           >
         </el-menu-item-group>
