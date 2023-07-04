@@ -118,7 +118,7 @@ export default {
     // 新增预定信息
     async roomvAdd() {
       this.$store.commit('editRoom/aroomEdit', '新增')
-      this.$router.push('/admin/roomedit')
+      this.$router.push('/admin/room/roomedit')
     },
     // 获取预定信息数据
     async getRoom() {
@@ -136,7 +136,7 @@ export default {
 
     // 更多介绍
     moreIntroduction(row) {
-      this.$router.push('/admin/rmore')
+      this.$router.push('/admin/room/rmore')
       this.$store.commit('editRoom/aroomMid', row.room_id)
     },
 
@@ -150,7 +150,7 @@ export default {
       // console.log(row)
       this.$store.commit('editRoom/aroomId', row.id)
       this.$store.commit('editRoom/aroomEdit', '编辑')
-      this.$router.push('/admin/roomedit')
+      this.$router.push('/admin/room/roomedit')
     },
     // 删除按钮操作
     handleDelete(row) {

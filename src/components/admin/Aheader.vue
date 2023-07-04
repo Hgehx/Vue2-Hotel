@@ -20,6 +20,7 @@
       >
         <!-- 头像 -->
         <el-avatar :src="$store.state.editAvatar.adminAvatar"></el-avatar>
+        123123
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="binfo">
             {{ $store.state.adminName }}</el-dropdown-item
