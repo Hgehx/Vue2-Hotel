@@ -1,11 +1,7 @@
 <template>
   <div class="container">
     <el-menu
-<<<<<<< HEAD
       :default-active="activeIndex"
-=======
-      :default-active="$route.name"
->>>>>>> 6a391619599cd1b4eae84d2807838aba2767884f
       class="el-menu-vertical-demo"
       background-color="#393d49"
       text-color="#fff"

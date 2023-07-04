@@ -1,3 +1,4 @@
+// 管理员路由模块
 // 管理员登录
 import Admin from '@/views/admin/Index.vue'
 import AdminLogin from '@/views/admin/login/Login.vue'
