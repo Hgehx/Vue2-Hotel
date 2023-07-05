@@ -12,15 +12,44 @@
           placement="bottom"
         >
           <!-- 头像 -->
-          <el-avatar :src="$store.state.editAvatar.adminAvatar"></el-avatar>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="binfo">
-              {{ $store.state.adminName }}</el-dropdown-item
+          <div class="avatarSpan">
+            <el-avatar
+              :size="25"
+              :src="$store.state.editAvatar.adminAvatar"
+            ></el-avatar>
+            <span>123<i class="el-icon-arrow-down el-icon--right"></i></span>
+          </div>
+
+          <el-dropdown-menu slot="dropdown" style="width: 180px">
+            <el-dropdown-item
+              command="binfo"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
             >
+              <el-avatar
+                class="bigAvatar"
+                :size="60"
+                :src="$store.state.editAvatar.adminAvatar"
+              ></el-avatar>
+              <div class="right">
+                <div style="padding: 5px 0 0 0; margin-left: 5px">
+                  尊敬的用户
+                </div>
+                <div><i class="iconfont icon-huiyuan"></i>普通会员</div>
+              </div>
+            </el-dropdown-item>
             <el-dropdown-item command="binfo" divided>
-              个人中心</el-dropdown-item
+              <i class="iconfont icon-yonghu"></i>个人中心</el-dropdown-item
             >
-            <el-dropdown-item command="exit">退出</el-dropdown-item>
+            <el-dropdown-item command="binfo"
+              ><i class="iconfont icon-fuwudianping"></i>点评</el-dropdown-item
+            >
+            <el-dropdown-item command="exit"
+              ><i class="iconfont icon-tuichu"></i>退出</el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -66,9 +95,15 @@ export default {
 
 <style lang="less" scoped>
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 220px;
+  z-index: 999;
   .logo {
     img {
       height: 40px;
@@ -79,7 +114,20 @@ export default {
     justify-content: center;
     align-items: center;
     .avatar {
-      margin-right: 20px;
+      margin-right: 15px;
+      .avatarSpan {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        background: #f2f8fe;
+        border-radius: 16px 16px 16px 16px;
+        padding: 4px 8px 4px 4px;
+        cursor: pointer;
+        span {
+          margin-left: 10px;
+        }
+      }
     }
     .myOrder {
       margin-right: 20px;
