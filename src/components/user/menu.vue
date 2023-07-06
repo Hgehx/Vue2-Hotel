@@ -1,23 +1,23 @@
 <template>
   <div class="container">
-    <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" router>
-      <el-menu-item index="home" :route="{ path: '/personal/' }">
+    <el-menu :default-active="$route.path" class="el-menu-vertical-demo" router>
+      <el-menu-item index="/personal">
         <i class="iconfont icon-shouye"></i>
         <span slot="title">个人信息</span>
       </el-menu-item>
-      <el-menu-item index="order" :route="{ path: '/personal/order' }">
+      <el-menu-item index="/personal/order">
         <i class="iconfont icon-wodeyuyue"></i>
         <span slot="title">订单</span>
       </el-menu-item>
-      <el-menu-item index="review" :route="{ path: '/personal/review' }">
+      <el-menu-item index="/personal/review">
         <i class="iconfont icon-fangjianweihu"></i>
         <span slot="title">点评</span>
       </el-menu-item>
-      <el-menu-item index="eavatar" :route="{ path: '/personal/eavatar' }">
+      <el-menu-item index="/personal/eavatar">
         <i class="iconfont icon-pinglun"></i>
         <span slot="title">修改头像</span>
       </el-menu-item>
-      <el-menu-item index="epwd" :route="{ path: '/personal/epwd' }">
+      <el-menu-item index="/personal/epwd">
         <i class="iconfont icon-pinglun"></i>
         <span slot="title">修改密码</span>
       </el-menu-item>
@@ -31,18 +31,7 @@ export default {
   data() {
     return {}
   },
-  computed: {
-    activeIndex() {
-      // 获取当前路由路径
-      const currentPath = this.$route.path
-      console.log(currentPath.includes('/admin/room'))
-      // 判断当前路由是否是子路由的路径之一
-      if (currentPath.includes('/admin/room')) {
-        return '/admin/room' // 设置父级菜单项的 index
-      }
-      return currentPath
-    }
-  }
+  computed: {}
 }
 </script>
 
