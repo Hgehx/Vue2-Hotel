@@ -13,7 +13,8 @@
         </div>
       </div>
       <div class="right">
-        <s>¥256</s> <span>¥182</span> 起 <button>选择房间</button>
+        <s>¥256</s> <span>¥182</span> 起
+        <button @click="scrollToSection">选择房间</button>
       </div>
     </div>
     <div class="moreImg">
@@ -37,6 +38,12 @@ export default {
   name: 'hotelInfo',
   data() {
     return {}
+  },
+  methods: {
+    // 点击跳转到房间信息区域
+    scrollToSection() {
+      window.scrollTo(0, 480)
+    }
   }
 }
 </script>

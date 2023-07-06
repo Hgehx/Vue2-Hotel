@@ -30,7 +30,7 @@
         <img src="@/assets/ceshiCode.png" alt="" />
       </div>
       <p>酒店预订电话</p>
-      <p class="photoText">4008-121-121</p>
+      <p class="photoText">1314-666-666</p>
       <p>24小时服务电话，免长话费，全年无休</p>
     </div>
   </div>

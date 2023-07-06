@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <!-- 回到顶部 -->
+    <el-backtop :bottom="100" style="font-size: 30px"> </el-backtop>
     <!-- 顶部导航 -->
     <div class="header">
       <div class="wrapper">
@@ -61,10 +63,10 @@ export default {
 <style lang="less" scoped>
 .container {
   background-color: #f5f7fa;
-
   .header {
     background-color: #fff;
     height: 70px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 底部边框阴影效果 */
   }
   .hotel_info,
   .room_info,

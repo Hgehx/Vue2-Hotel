@@ -1,70 +1,64 @@
 <template>
   <div class="container">
-    <h3>客房信息</h3>
-    <!-- 表格数据 -->
-    <div class="table">
-      <el-table
-        :data="tableData"
-        style="width: 100%"
-        :show-header="false"
-        header-row-class-name="active-header"
-      >
-        <el-table-column
-          prop="room_name"
-          label="客房名称"
-          width="180"
-          align="center"
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>点评</span>
+      </div>
+      <!-- 表格数据 -->
+      <div class="table">
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          header-row-class-name="active-header"
         >
-        </el-table-column>
-        <el-table-column width="220" prop="photo" label="图片" align="center">
-          <template slot-scope="scope">
-            <el-popover
-              placement="right"
-              width="475"
-              trigger="hover"
-              :open-delay="700"
-            >
-              <img
-                class="room_photo"
-                width="450px"
-                height="300px"
-                :src="scope.row.photo"
-                alt=""
-              />
-              <div slot="reference">
-                <img class="room_photo" :src="scope.row.photo" alt="" />
-              </div>
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column prop="room_info" label="介绍" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.room_info }}
-            <span
-              style="color: #409eff; cursor: pointer"
-              @click="moreIntroduction(scope.row)"
-              >更多></span
-            ></template
+          <el-table-column
+            prop="room_name"
+            label="客房名称"
+            width="180"
+            align="center"
           >
-        </el-table-column>
-
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <div class="priceBtn">
-              价格：<span class="price">￥{{ scope.row.price }}</span>
-              <button
-                type="primary"
-                icon="el-icon-edit"
-                class="btn"
-                @click="handleEdit(scope.row)"
-              >
-                预定
-              </button>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+          </el-table-column>
+          <el-table-column prop="room_info" label="介绍" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.room_info }}
+              <span
+                style="color: #409eff; cursor: pointer"
+                @click="moreIntroduction(scope.row)"
+                >更多></span
+              ></template
+            >
+          </el-table-column>
+          <el-table-column prop="" label="总额" align="center">
+            280
+          </el-table-column>
+          <el-table-column prop="" label="状态" align="center">
+            待点评
+          </el-table-column>
+          <el-table-column prop="room_name" label="操作" align="center">
+            <button
+              type="primary"
+              icon="el-icon-edit"
+              class="btn"
+              @click="handleEdit(scope.row)"
+            >
+              点评
+            </button>
+          </el-table-column>
+        </el-table>
+      </div>
+      <!-- 分页 -->
+      <div class="block">
+        <div class="left">
+          <el-pagination
+            :page-size="pagesize"
+            @current-change="handleCurrentChange"
+            layout="total, prev, pager, next"
+            :total="total"
+          >
+          </el-pagination>
+        </div>
+      </div>
+    </el-card>
 
     <!-- 客房更多信息 -->
     <el-dialog
@@ -85,32 +79,20 @@
       <h4>洗浴用品</h4>
       <span v-html="roomMore.bathing"></span>
     </el-dialog>
-
-    <!-- 分页 -->
-    <!-- <div class="block">
-      <div class="left">
-        <el-pagination
-          :page-size="pagesize"
-          @current-change="handleCurrentChange"
-          layout="total, prev, pager, next"
-          :total="total"
-        >
-        </el-pagination>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 export default {
-  name: 'roomInfo',
+  name: 'roomOrder',
+  components: {},
   data() {
     return {
       centerDialogVisible: false,
       tableData: [], //表格数据
       form: {}, //表单
       pagenum: 1,
-      pagesize: 100,
+      pagesize: 3,
       total: 0, //数据总条数
       roomMore: {
         baseinfo: '', //更多信息
@@ -179,18 +161,11 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  padding: 20px;
-  background-color: #fff !important;
-  h3 {
-    padding-bottom: 5px;
-    border-bottom: 1px solid #ebeef5;
+  .clearfix {
+    font-size: 25px;
   }
+
   .table {
-    .room_photo {
-      width: 200px;
-      height: 120px;
-      cursor: pointer;
-    }
     .priceBtn {
       display: flex;
       align-items: center;
@@ -202,18 +177,18 @@ export default {
         text-align: right;
         margin-right: 10px;
       }
-      .btn {
-        width: 80px;
-        height: 40px;
-        line-height: 40px;
-        margin-right: 10px;
-        border: none;
-        background-color: #ff9500;
-        color: #fff;
-        font-size: 16px;
-        font-weight: 700;
-        border-radius: 5px;
-      }
+    }
+    .btn {
+      width: 80px;
+      height: 40px;
+      line-height: 40px;
+      margin-right: 10px;
+      border: none;
+      background-color: #409eff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 5px;
     }
   }
   .roomMore {

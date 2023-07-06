@@ -1,9 +1,12 @@
 <template>
   <div class="header">
     <div class="logo">
-      <img src="@/assets/logo_color.png" alt="" />
+      <img @click="$router.push('/')" src="@/assets/logo_color.png" alt="" />
     </div>
     <div class="userinfo">
+      <div class="backHome" @click="$router.push('/')">
+        <i class="iconfont icon-shouye"></i>首页
+      </div>
       <div class="avatar">
         <!-- 下拉菜单 -->
         <el-dropdown
@@ -44,7 +47,7 @@
             <el-dropdown-item command="binfo" divided>
               <i class="iconfont icon-yonghu"></i>个人中心</el-dropdown-item
             >
-            <el-dropdown-item command="binfo"
+            <el-dropdown-item command="review"
               ><i class="iconfont icon-fuwudianping"></i>点评</el-dropdown-item
             >
             <el-dropdown-item command="exit"
@@ -53,11 +56,33 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <div class="myOrder">
+      <div
+        class="myOrder"
+        @click="$router.push('/personal/order')"
+        style="cursor: pointer"
+      >
         <i class="iconfont icon-dingdan"></i>
         我的订单
       </div>
-      <div class="serve"><i class="iconfont icon-kefu"></i>客服</div>
+      <div class="serve">
+        <el-dropdown
+          @command="handleCommand"
+          :show-timeout="10"
+          placement="bottom"
+        >
+          <span class="el-dropdown-link">
+            <i class="iconfont icon-kefu"></i
+            ><span style="color: #000">客服</span>
+          </span>
+
+          <el-dropdown-menu slot="dropdown" style="width: 180px">
+            <el-dropdown-item>
+              客服电话：
+              <p>1314-666-666</p></el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -69,7 +94,10 @@ export default {
     handleCommand(command) {
       // 个人中心
       if (command === 'binfo') {
-        this.$router.push('/admin/binfo')
+        this.$router.push('/personal')
+      }
+      if (command === 'review') {
+        this.$router.push('/personal/review')
       }
       if (command === 'exit') {
         // 退出
@@ -83,8 +111,8 @@ export default {
               type: 'success',
               message: '退出成功!'
             })
-            localStorage.removeItem('adminToken')
-            this.$router.push('/admin/login')
+            // localStorage.removeItem('adminToken')
+            this.$router.push('/login')
           })
           .catch(() => {})
       }
@@ -107,12 +135,22 @@ export default {
   .logo {
     img {
       height: 40px;
+      cursor: pointer;
     }
   }
   .userinfo {
     display: flex;
     justify-content: center;
     align-items: center;
+    .backHome {
+      margin-right: 15px;
+      cursor: pointer;
+      i {
+        margin-right: 3px;
+        font-size: 18px;
+        color: #5b78a8;
+      }
+    }
     .avatar {
       margin-right: 15px;
       .avatarSpan {

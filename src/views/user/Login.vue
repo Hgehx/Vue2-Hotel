@@ -4,9 +4,9 @@
       <!-- 滑动盒子 -->
       <div class="pre-box" @click="changeX" ref="pre_box">
         <h1>WELCOME</h1>
-        <p>JOIN US!</p>
+        <p>XIANG LU</p>
         <div class="img-box">
-          <img src="@/assets/img/waoku.jpg" alt="" ref="img_change" />
+          <img src="@/assets/logo_tx.png" alt="" ref="img_change" />
         </div>
       </div>
 
