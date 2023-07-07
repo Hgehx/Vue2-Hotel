@@ -17,39 +17,51 @@
               中国，江苏，南京，溧水区，永阳镇天生桥大道280号南方新城4幢10室
             </div>
             <div class="roomMore">
-              <div class="room_name">温馨大床房</div>
+              <h4>{{ form.room_name }}</h4>
+              <h4>价格：￥{{ form.price }}</h4>
               <div class="room_more">
-                <div>1张大床1.8米 30-35m 9层 飘窗 WIFI免费 禁烟 2人 无早餐</div>
+                <div class="iconInfo" v-html="moreInfo.baseinfo"></div>
                 <div>
-                  食品饮品: 瓶装水免费，冰箱免费，电热水壶，厨房免费，抽油烟机
-                </div>
-                <div>费用政策: 加床:该房型不可加床。停车场:有免费停车场</div>
-                <div>
-                  便利设施多种规格电源插座免费，单一规格电源插座,220V电压插座,遮光窗帘，手动窗帘,书桌，座椅，办公用品(笔、便签)，坐卧两用长沙发，床具:鸭绒被,床具:毯子或被子，针线包免费，衣柜/衣橱,，空调免费，独立空调，暖气，洗衣机，房间内高速上网，客房WiFi免费，洗衣用品免费，衣架，茶几，餐桌，一次性拖鞋，一次性漱口杯，一次性毛巾免费
+                  <h4>食品饮品:</h4>
+                  {{ moreInfo.foot }}
                 </div>
                 <div>
-                  洗浴配套：
-                  独立卫生间，24小时热水，电热水器，独立淋浴间，吹风机，拖鞋，浴巾，浴室化妆放大镜免费，卫生纸
+                  <h4>费用政策:</h4>
+                  {{ moreInfo.policy }}
                 </div>
                 <div>
-                  洗浴用品
-                  牙刷,牙膏,洗发水，沐浴露，护发素，浴帽,香皂，梳子，剃须刀，毛巾
+                  <h4>便利设施:</h4>
+                  {{ moreInfo.facilities }}
+                </div>
+                <div>
+                  <h4>洗浴配套：</h4>
+                  {{ moreInfo.bathroom }}
+                </div>
+                <div>
+                  <h4>洗浴用品:</h4>
+                  {{ moreInfo.bathing }}
                 </div>
               </div>
             </div>
           </div>
           <div class="resvinfo">
             <h3>预约</h3>
-
-            <el-form ref="form" :model="form" label-width="70px">
-              <el-form-item label="日期">
+            <el-form
+              ref="resvForm"
+              :model="resvForm"
+              label-width="70px"
+              :rules="rules"
+            >
+              <el-form-item label="日期" prop="date">
                 <div class="block">
                   <el-date-picker
-                    v-model="datevalue"
+                    v-model="date"
                     type="daterange"
                     start-placeholder="入住日期"
                     end-placeholder="退房日期"
-                    :default-time="['00:00:00', '23:59:59']"
+                    format="yyyy 年 MM 月 dd 日"
+                    value-format="yyyy-MM-dd"
+                    :clearable="false"
                   >
                   </el-date-picker>
                 </div>
@@ -57,40 +69,42 @@
               <h5>住客资料</h5>
               <el-form-item label="住客姓名">
                 <el-input
-                  v-model="form.username"
+                  v-model="resvForm.username"
                   placeholder="请输入用户名"
                 ></el-input>
               </el-form-item>
               <el-form-item label="电话">
                 <el-input
-                  v-model="form.phone"
+                  v-model="resvForm.phone"
                   placeholder="请输入电话"
                 ></el-input>
               </el-form-item>
               <el-form-item label="电子邮箱">
                 <el-input
-                  v-model="form.name"
+                  v-model="resvForm.email"
                   placeholder="电子邮箱(选填)"
                 ></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">支付</el-button>
+                <el-button type="primary" @click="onSubmit('resvForm')"
+                  >支付</el-button
+                >
               </el-form-item>
             </el-form>
           </div>
         </div>
         <div class="right">
           <div class="days">
-            <p>1间 × 1晚</p>
-            <p>￥345</p>
+            <p>1间 × {{ (diffDays = nightNum) }}晚</p>
+            <p>￥{{ oldTotal }}</p>
           </div>
           <div class="subsidy">
             <p>百亿补贴</p>
-            <p class="subsidyNum">-￥345</p>
+            <p class="subsidyNum">-￥{{ moreInfo.preferential }}</p>
           </div>
           <div class="price">
             <p>应付总额</p>
-            <p class="priceNum">￥256</p>
+            <p class="priceNum">￥{{ (this.resvForm.price = total) }}</p>
           </div>
 
           <div class="divider"></div>
@@ -107,7 +121,22 @@
               预订服务由携程旗下翔鹭有限公司及其分公司提供、住宿服务由酒店提供，交易款项由商家委托翔鹭旗下子公司统一收取。
             </div>
           </div>
-          <div class="back" @click="$router.back()">返回首页</div>
+          <div class="divider"></div>
+          <div>
+            <el-popover
+              placement="top-start"
+              title="客服电话："
+              width="200"
+              trigger="hover"
+              content="1314-666-666"
+            >
+              <el-button class="serve" slot="reference"
+                ><i class="iconfont icon-kefu"></i>咨询客服</el-button
+              >
+            </el-popover>
+          </div>
+          <div class="divider"></div>
+          <div><span class="back" @click="$router.back()">返回首页</span></div>
         </div>
       </div>
     </div>
@@ -121,19 +150,139 @@ import Uheader from '@/components/user/Uheader.vue'
 export default {
   name: 'userResv',
   components: { Uheader, Ufooter },
+  computed: {
+    nightNum() {
+      const date1 = new Date(this.date[0])
+      const date2 = new Date(this.date[1])
+      // 计算天数差异
+      const diffTime = Math.abs(date2.getTime() - date1.getTime())
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      // console.log(`相差天数：${diffDays}`)
+      return diffDays || 1
+    },
+
+    // 应付总额
+    total() {
+      return this.form.price * this.diffDays - this.moreInfo.preferential
+    },
+
+    // 优惠之前的总额
+    oldTotal() {
+      return this.form.price * this.diffDays || this.form.price
+    }
+  },
+  watch: {
+    diffDays() {
+      this.resvForm.date = this.date[0] + ' ~ ' + this.date[1]
+    }
+  },
   data() {
+    var validateDate = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请选择日期'))
+      } else {
+        const currentDate = new Date()
+        // 提取前一个日期
+        const extractedDate = new Date(this.resvForm.date.split(' ~ ')[0])
+        // 将时间部分设置为 00:00:00
+        currentDate.setHours(0, 0, 0, 0)
+        if (currentDate <= extractedDate) {
+          callback()
+        } else {
+          callback(new Error('请选择大于等于当前的日期'))
+        }
+      }
+    }
     return {
       datevalue: '',
-      form: {
-        username: '',
-        region: '1',
-        phone: ''
+      form: this.$store.state.editRoom.uroom_info,
+      moreInfo: {},
+      diffDays: 1, //几晚
+      date: '',
+      resvForm: {
+        username: '', //用户名
+        phone: '', // 电话
+        price: 1, // 价格
+        date: '', // 时间
+        room_name: '', //客房名称
+        email: '' // 邮箱
+      },
+      rules: {
+        date: [{ validator: validateDate, trigger: 'blur' }]
       }
     }
   },
+  mounted() {
+    this.getRoomMore()
+    this.resvForm.room_name = this.form.room_name
+  },
   methods: {
+    // 获取更多信息
+    async getRoomMore() {
+      const { data: res } = await this.$http.get('/admin/idMore', {
+        params: {
+          room_id: this.form.room_id
+        }
+      })
+      if (res.status === 200) {
+        // console.log(res.data[0])
+        this.moreInfo = res.data[0]
+      } else {
+        console.log('获取失败')
+      }
+    },
+
     // 支付按钮
-    onSubmit() {}
+    onSubmit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$confirm(
+            `入住时间：${this.resvForm.date}<br>应付金额：${this.resvForm.price}`,
+            '提示',
+            {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'info',
+              dangerouslyUseHTMLString: true // 配置项，用于告诉Vue.js确认对话框内容中包含HTML标签
+            }
+          )
+            .then(async () => {
+              // 预约信息添加
+              const { data: res } = await this.$http.post(
+                '/admin/resvAdd',
+                this.resvForm
+              )
+              // 预约。对客房数量进行-1
+              const { data: resnum } = await this.$http.patch(
+                '/admin/updateNum',
+                {
+                  room_name: this.resvForm.room_name,
+                  operation: 'reduce'
+                }
+              )
+              // 对客房进行
+              if (res.status === 200 && resnum.status === 200) {
+                this.$message({
+                  type: 'success',
+                  message: '支付成功!'
+                })
+                // 支付成功跳转到订单页面
+                this.$router.push('/personal/order')
+              } else {
+                this.$message({
+                  type: 'success',
+                  message: '支付失败!'
+                })
+              }
+              console.log(this.resvForm)
+            })
+            .catch(() => {})
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
   }
 }
 </script>
@@ -171,6 +320,18 @@ export default {
           color: #455873;
           margin-bottom: 8px;
         }
+        .roomMore {
+          .iconInfo {
+            display: flex;
+            justify-content: space-between;
+            /deep/.iconfont {
+              margin-right: 5px;
+            }
+          }
+          div {
+            margin: 5px 0;
+          }
+        }
         .resvinfo {
           width: 768px;
           padding: 20px;
@@ -194,7 +355,7 @@ export default {
       .right {
         width: 376px;
         background-color: #fff;
-        height: 465px;
+        height: 600px;
         padding: 20px;
         .days,
         .subsidy,
@@ -244,6 +405,13 @@ export default {
           }
           font-size: 14px;
           color: #8592a6;
+        }
+        .serve {
+          color: #5b78a8;
+          cursor: pointer;
+          .iconfont {
+            margin-right: 5px;
+          }
         }
         .back {
           color: #287dfa;

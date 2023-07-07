@@ -37,6 +37,9 @@
         <el-form-item label="洗浴用品">
           <el-input v-model="formInline.bathing"></el-input>
         </el-form-item>
+        <el-form-item label="优惠价格(元)">
+          <el-input v-model="formInline.preferential"></el-input>
+        </el-form-item>
         <br />
         <el-form-item>
           <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -51,6 +54,7 @@
         <p>便利设施: {{ formInline.facilities }}</p>
         <p>浴室配套: {{ formInline.bathroom }}</p>
         <p>洗浴用品: {{ formInline.bathing }}</p>
+        <p>优惠价格: {{ formInline.preferential }}</p>
       </div>
     </el-card>
   </div>
@@ -68,7 +72,8 @@ export default {
         policy: '', // 费用政策
         facilities: '', // 便利设施
         bathroom: '', // 浴室配套
-        bathing: '' //洗浴用品
+        bathing: '', //洗浴用品
+        preferential: 10 //优惠价格
       },
       baseList: [
         //基本字段

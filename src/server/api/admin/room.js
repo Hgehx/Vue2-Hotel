@@ -182,3 +182,34 @@ exports.updateMore = (req, res) => {
     }
   })
 }
+
+// 对客房数量++  管理员退房操作
+exports.updateNumadd = (req, res) => {
+  const { room_name, operation } = req.body
+  let sql
+  if (operation === 'add') {
+    sql =
+      'UPDATE room_management SET room_num = room_num + 1 WHERE room_name = ?'
+  } else if (operation === 'reduce') {
+    sql =
+      'UPDATE room_management SET room_num = room_num - 1 WHERE room_name = ?'
+  }
+
+  db.query(sql, room_name, (err, data) => {
+    if (err) {
+      return res.send('错误：' + err.message)
+    }
+    if (data.affectedRows > 0) {
+      res.send({
+        status: 200,
+        message: '修改成功'
+      })
+    } else {
+      res.send({
+        status: 201,
+        message: '修改失败',
+        err
+      })
+    }
+  })
+}

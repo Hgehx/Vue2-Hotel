@@ -27,6 +27,7 @@ router.delete('/delRoom', room.delRoom) //删除
 router.post('/addMore', room.addMore) //新增客房信息
 router.get('/idMore', room.idMore) //指定id客房信息
 router.patch('/updateMore', room.updateMore) //修改介绍
+router.patch('/updateNum', room.updateNumadd) //退房，客房数量+1,用户预约数量-1
 
 // 用户评价信息
 router.get('/reviInfo', revi.reviInfo) // 分页获取

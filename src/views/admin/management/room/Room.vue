@@ -154,38 +154,37 @@ export default {
     },
     // 删除按钮操作
     handleDelete(row) {
-      // console.log('删除信息id----', row.id)
+      // console.log('删除信息id----', row.room_name)
       this.$confirm('确定删除该客户信息吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(() => {
-          this.$http
-            .delete('/admin/delRoom', {
-              params: {
-                id: row.id
-              }
+        .then(async () => {
+          // 删除数据
+          const { data: resdel } = await this.$http.delete('/admin/delRoom', {
+            params: {
+              id: row.id
+            }
+          })
+
+          if (resdel.status === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
             })
-            .then(res => {
-              if (res.status === 200) {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
-                if (this.input) {
-                  this.input = ''
-                } else if (this.total % this.pagesize === 1) {
-                  this.handleCurrentChange(this.pagenum - 1)
-                }
-                this.getRoom()
-              } else {
-                this.$message({
-                  type: 'error',
-                  message: '删除失败'
-                })
-              }
+            if (this.input) {
+              this.input = ''
+            } else if (this.total % this.pagesize === 1) {
+              this.handleCurrentChange(this.pagenum - 1)
+            }
+            this.getRoom()
+          } else {
+            this.$message({
+              type: 'error',
+              message: '删除失败'
             })
+          }
         })
         .catch(() => {})
     }

@@ -59,7 +59,7 @@ export default {
     activeIndex() {
       // 获取当前路由路径
       const currentPath = this.$route.path
-      console.log(currentPath.includes('/admin/room'))
+      // console.log(currentPath.includes('/admin/room'))
       // 判断当前路由是否是子路由的路径之一
       if (currentPath.includes('/admin/room')) {
         return '/admin/room' // 设置父级菜单项的 index

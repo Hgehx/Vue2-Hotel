@@ -67,7 +67,7 @@
           center
         >
           <!-- 表单 -->
-          <el-form ref="form" :model="form" label-width="120px">
+          <el-form ref="form" :model="form" label-width="120px" :rules="rules">
             <el-form-item label="客户名称">
               <el-input v-model="form.username"></el-input>
             </el-form-item>
@@ -80,7 +80,7 @@
             <el-form-item label="电话">
               <el-input v-model="form.phone"></el-input>
             </el-form-item>
-            <el-form-item label="预定日期">
+            <el-form-item label="预定日期" prop="date">
               <el-input v-model="form.date"></el-input>
               <div class="date">
                 <el-date-picker
@@ -95,7 +95,7 @@
           </el-form>
           <span slot="footer" class="dialog-footer">
             <el-button @click="formCancel">取 消</el-button>
-            <el-button type="primary" @click="formSubmit(category)"
+            <el-button type="primary" @click="formSubmit(category, 'form')"
               >确 定</el-button
             >
           </span>
@@ -125,20 +125,45 @@
 export default {
   name: 'adminReservation',
   data() {
+    var validateDate = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请选择日期'))
+      } else {
+        const currentDate = new Date()
+        // 提取前一个日期
+        if (this.form.date) {
+          const extractedDate = new Date(this.form.date.split(' ~ ')[0])
+          // 将时间部分设置为 00:00:00
+          currentDate.setHours(0, 0, 0, 0)
+          if (currentDate <= extractedDate) {
+            callback()
+          } else {
+            callback(new Error('请选择大于等于当前的日期'))
+          }
+        } else {
+          callback(new Error('请选择日期'))
+          this.centerDialogVisible = true
+        }
+      }
+    }
     return {
       tableData: [], //表格数据
       centerDialogVisible: false, //隐藏显示弹出层
       form: {}, //弹出层表单
+      date: '',
       title: '', // 弹出层标题
       category: '', // 弹出层操作类型
       value1: '', //入住时间
       value2: '', // 退房时间
       input: '', //搜索框内容
       pagenum: 1,
-      pagesize: 8,
-      total: 0,
-      isShow: false,
-      value: ''
+      pagesize: 8, //每页显示条数
+      total: 0, //数据总条数
+      isShow: false, //弹出层
+      value: '',
+      rules: {
+        date: [{ validator: validateDate, trigger: 'blur' }]
+      }
     }
   },
   mounted() {
@@ -221,6 +246,7 @@ export default {
       this.value1 = dateStr[0]
       this.value2 = dateStr[1]
     },
+
     // 删除按钮操作
     handleDelete(row) {
       // console.log('删除信息id----', row.id)
@@ -229,70 +255,98 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(() => {
-          this.$http
-            .delete('/admin/resvDel', {
-              params: {
-                id: row.id
-              }
+        .then(async () => {
+          // 删除数据
+          const { data: resdel } = await this.$http.delete('/admin/resvDel', {
+            params: {
+              id: row.id
+            }
+          })
+
+          //  // 退房， 对客房数量+1
+          const { data: resnum } = await this.$http.patch('/admin/updateNum', {
+            room_name: row.room_name,
+            operation: 'add'
+          })
+
+          if (resdel.status === 200 && resnum.status === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
             })
-            .then(res => {
-              if (res.status === 200) {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
-                if (this.input) {
-                  this.input = ''
-                } else if (this.total % this.pagesize === 1) {
-                  this.handleCurrentChange(this.pagenum - 1)
-                }
-                this.getResv()
-              } else {
-                this.$message({
-                  type: 'error',
-                  message: '删除失败'
-                })
-              }
+            if (this.input) {
+              this.input = ''
+            } else if (this.total % this.pagesize === 1) {
+              this.handleCurrentChange(this.pagenum - 1)
+            }
+            this.getResv()
+          } else {
+            this.$message({
+              type: 'error',
+              message: '删除失败'
             })
+          }
         })
         .catch(() => {})
     },
 
     // 弹出框表单提交
-    async formSubmit(category) {
+    async formSubmit(category, formName) {
       this.centerDialogVisible = false
-      // 获取对应数据id
-      // console.log(this.form.id)
-      if (category == '编辑') {
-        if (this.input) {
-          this.input = this.form.username
-        }
-        await this.$http.patch('/admin/resvUpdate', this.form)
-        this.$message({
-          type: 'success',
-          message: '更新数据成功'
-        })
-      } else {
-        console.log('进行新增操作')
-        const { data: res } = await this.$http.post('/admin/resvAdd', this.form)
-        if (res.status === 200) {
-          this.$message({
-            type: 'success',
-            message: '新增数据成功'
-          })
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          // 获取对应数据id
+          // console.log(this.form.id)
+          if (category == '编辑') {
+            if (this.input) {
+              this.input = this.form.username
+            }
+            await this.$http.patch('/admin/resvUpdate', this.form)
+            this.$message({
+              type: 'success',
+              message: '更新数据成功'
+            })
+          } else {
+            // console.log('进行新增操作')
+            let room_name = ''
+            if (this.form.room_name) {
+              room_name = this.form.room_name
+            }
+            const { data: res } = await this.$http.post(
+              '/admin/resvAdd',
+              this.form
+            )
+            // 预约。对客房数量进行-1
+            const { data: resnum } = await this.$http.patch(
+              '/admin/updateNum',
+              {
+                room_name,
+                operation: 'reduce'
+              }
+            )
+            console.log(resnum)
+            if (res.status === 200 && resnum.status === 200) {
+              this.$message({
+                type: 'success',
+                message: '新增数据成功'
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '新增数据失败'
+              })
+            }
+          }
+          if (this.input) {
+            this.searchSubmit()
+          } else {
+            this.getResv()
+          }
         } else {
-          this.$message({
-            type: 'error',
-            message: '新增数据失败'
-          })
+          console.log('error submit!!')
+          return false
         }
-      }
-      if (this.input) {
-        this.searchSubmit()
-      } else {
-        this.getResv()
-      }
+      })
     },
 
     // 弹出层取消

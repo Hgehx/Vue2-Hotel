@@ -40,11 +40,12 @@
         <el-table-column prop="room_info" label="介绍" align="center">
           <template slot-scope="scope">
             {{ scope.row.room_info }}
-            <span
+            <div
               style="color: #409eff; cursor: pointer"
               @click="moreIntroduction(scope.row)"
-              >更多></span
-            ></template
+            >
+              更多详情>
+            </div></template
           >
         </el-table-column>
 
@@ -52,14 +53,29 @@
           <template slot-scope="scope">
             <div class="priceBtn">
               价格：<span class="price">￥{{ scope.row.price }}</span>
-              <button
-                type="primary"
-                icon="el-icon-edit"
-                class="btn"
-                @click="handleEdit(scope.row)"
+              <div
+                class="operate"
+                :style="{
+                  'padding-top': isAvailable(scope.row.room_num) ? '20px' : ''
+                }"
               >
-                预定
-              </button>
+                <button
+                  type="primary"
+                  icon="el-icon-edit"
+                  class="btn"
+                  :class="{ btnintact: !scope.row.room_num }"
+                  @click="handleEdit(scope.row, scope.row.room_num)"
+                  style="cursor: pointer"
+                >
+                  {{ !scope.row.room_num ? '售完' : '预约' }}
+                </button>
+                <div
+                  style="color: red"
+                  v-show="isAvailable(scope.row.room_num)"
+                >
+                  仅剩{{ scope.row.room_num }}间
+                </div>
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -126,10 +142,14 @@ export default {
     // 获取预定信息表
     this.getRoom()
   },
-
+  computed: {},
   // 监听
   watch: {},
   methods: {
+    // 判断预约模块内容
+    isAvailable(roomNum) {
+      return roomNum > 0 && roomNum <= 3
+    },
     // 获取预定信息数据
     async getRoom() {
       const { data: res } = await this.$http.get('/admin/roomInfo', {
@@ -138,7 +158,7 @@ export default {
           pagesize: this.pagesize
         }
       })
-      // console.log(res)
+      console.log(res)
       this.total = res.total
       this.$store.commit('editRoom/aroomTotal', this.total)
       this.tableData = res.data
@@ -147,7 +167,7 @@ export default {
     // 更多介绍
     async moreIntroduction(row) {
       // this.$store.commit('editRoom/aroomMid', row.room_id)
-      console.log(row.room_id)
+      // console.log(row.room_id)
       this.centerDialogVisible = true
       const { data: res } = await this.$http.get('/admin/idMore', {
         params: {
@@ -155,7 +175,7 @@ export default {
         }
       })
       if (res.status === 200) {
-        console.log(res.data[0])
+        // console.log(res.data[0])
         this.roomMore = res.data[0]
       } else {
         console.log(res)
@@ -169,9 +189,17 @@ export default {
     },
 
     // 预定
-    handleEdit(row) {
-      console.log(row)
-      this.$router.push('/resv')
+    handleEdit(row, num) {
+      // console.log(row)
+      if (num) {
+        this.$store.commit('editRoom/uroomInfo', row)
+        this.$router.push('/resv')
+      } else {
+        this.$message({
+          type: 'error',
+          message: '已售完！请选择其他房型'
+        })
+      }
     }
   }
 }
@@ -202,17 +230,23 @@ export default {
         text-align: right;
         margin-right: 10px;
       }
-      .btn {
-        width: 80px;
-        height: 40px;
-        line-height: 40px;
-        margin-right: 10px;
-        border: none;
-        background-color: #ff9500;
-        color: #fff;
-        font-size: 16px;
-        font-weight: 700;
-        border-radius: 5px;
+      .operate {
+        text-align: center;
+        // padding-top: 20px;
+        .btn {
+          width: 80px;
+          height: 40px;
+          line-height: 40px;
+          border: none;
+          background-color: #ff9500;
+          color: #fff;
+          font-size: 16px;
+          font-weight: 700;
+          border-radius: 5px;
+        }
+        .btnintact {
+          background-color: #a1a1a1;
+        }
       }
     }
   }
