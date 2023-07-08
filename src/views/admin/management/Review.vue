@@ -23,9 +23,10 @@
           header-row-class-name="active-header"
         >
           <el-table-column prop="username" label="用户名"> </el-table-column>
-          <el-table-column prop="photo" label="联系电话"> </el-table-column>
+          <el-table-column prop="phone" label="联系电话"> </el-table-column>
           <el-table-column prop="rating" label="评分"> </el-table-column>
-          <el-table-column prop="date" label="日期"> </el-table-column>
+          <el-table-column prop="checkinDate" label="发表日期">
+          </el-table-column>
           <el-table-column prop="comment" label="用户评价内容" width="300">
             <template slot-scope="scope">
               <el-popover

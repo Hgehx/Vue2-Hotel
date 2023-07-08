@@ -86,6 +86,13 @@ exports.resvAdd = (req, res) => {
 
 // 删除数据
 exports.resvDel = (req, res) => {
+  const user_revi =
+    'INSERT INTO user_revi (username,room_name,phone, date) SELECT username,room_name,phone, date FROM resv_management WHERE id=?;'
+  db.query(user_revi, req.query.id, err => {
+    if (err) {
+      return res.send('错误：' + err.message)
+    }
+  })
   const sql = 'delete from resv_management where id=?'
   db.query(sql, req.query.id, (err, data) => {
     if (err) {

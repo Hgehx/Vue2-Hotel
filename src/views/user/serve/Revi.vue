@@ -1,34 +1,68 @@
 <template>
   <div class="container">
     <h3>用户点评</h3>
-    <div class="content">
+    <el-table
+      :data="tableData"
+      :border="false"
+      style="width: 100%"
+      :show-header="false"
+    >
+      <el-table-column>
+        <template slot-scope="scope">
+          <div class="content">
+            <div class="left">
+              <div class="left_flex">
+                <div class="imgPhoto">
+                  <img
+                    :src="
+                      scope.row.avatar ||
+                      'https://s1.ax1x.com/2023/06/30/pCBFz6J.png'
+                    "
+                    alt=""
+                  />
+                  <span class="username">{{ scope.row.username }}</span>
+                </div>
+                <div class="icon_flex">
+                  <i class="iconfont icon-chuang"></i>{{ scope.row.room_name }}
+                </div>
+                <div class="icon_flex">
+                  <i class="iconfont icon-riqi"></i>于{{
+                    scope.row.date.split('~')[0].trim()
+                  }}入住
+                </div>
+              </div>
+            </div>
+            <div class="right">
+              <div class="rating">
+                <span>{{ scope.row.rating }}</span
+                >/ 5
+              </div>
+              <div class="comment">
+                {{ scope.row.comment }}
+              </div>
+              <!-- <div class="photo"><img src="@/assets/img/b1.png" alt="" /></div> -->
+              <div class="date">{{ scope.row.checkinDate }} 发表</div>
+              <div class="admin_reply">
+                <h4>酒店回复</h4>
+                <div class="reply">
+                  {{ scope.row.admin_reply }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页 -->
+    <div class="block">
       <div class="left">
-        <div class="left_flex">
-          <div class="imgPhoto">
-            <img src="https://s1.ax1x.com/2023/07/01/pCBBWNR.png" alt="" />
-            <span class="username">尊敬的用户</span>
-          </div>
-          <div class="icon_flex">
-            <i class="iconfont icon-chuang"></i>大床房
-          </div>
-          <div class="icon_flex">
-            <i class="iconfont icon-riqi"></i>于2023年7月2日入住
-          </div>
-        </div>
-      </div>
-      <div class="right">
-        <div class="rating"><span>5</span>/ 5</div>
-        <div class="comment">
-          这个价格能在南京订到这个级别的酒店真的太划算了！酒店配免费停车场，前台服务也特别好，后半夜到达自动给你续住到隔日下午两点退房。周边有个7+7家常菜也很好吃，去无想山自驾的朋友可以试试看哦！
-        </div>
-        <div class="photo"><img src="@/assets/img/b1.png" alt="" /></div>
-        <div class="date">2023年7月6日 发表</div>
-        <div class="admin_reply">
-          <h4>酒店回复</h4>
-          <div class="reply">
-            {{ replyContent }}
-          </div>
-        </div>
+        <el-pagination
+          :page-size="pagesize"
+          @current-change="handleCurrentChange"
+          layout="total, prev, pager, next"
+          :total="total"
+        >
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -39,8 +73,33 @@ export default {
   name: 'userRevi',
   data() {
     return {
-      replyContent:
-        '小主的满意点赞，是对我们最大的认可哦。心愿是风，快乐是帆，幸福是船，心愿的风吹着快乐的帆载着幸福的船，飘向你，送你世上所有的幸福，愿小主的每次回家都是完美的，记得常回家看看哦，我们会继续努力带给您更加完美的住宿感受。'
+      tableData: [],
+      pagenum: 1,
+      pagesize: 4, //每页显示条数
+      total: 0 //数据总条数
+    }
+  },
+  mounted() {
+    this.getUserRevi()
+  },
+  methods: {
+    // 获取用户点评列表
+    async getUserRevi() {
+      const { data: res } = await this.$http.get('/admin/reviInfo', {
+        params: {
+          pagenum: this.pagenum,
+          pagesize: this.pagesize
+        }
+      })
+      if (res.status === 200) {
+        this.tableData = res.data.reverse()
+        this.total = res.total
+      }
+    },
+    // 改变第几页
+    handleCurrentChange(val) {
+      this.pagenum = val
+      this.getUserRevi()
     }
   }
 }
@@ -54,6 +113,11 @@ export default {
     padding-bottom: 5px;
     border-bottom: 1px solid #ebeef5;
   }
+
+  ::v-deep .el-table__body tr:hover > td {
+    background-color: transparent !important;
+  }
+
   .content {
     display: flex;
     justify-content: space-between;
