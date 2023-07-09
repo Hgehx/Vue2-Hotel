@@ -4,7 +4,11 @@
       <img @click="$router.push('/')" src="@/assets/logo_color.png" alt="" />
     </div>
     <div class="userinfo">
-      <div class="backHome" @click="$router.push('/')">
+      <div
+        class="backHome"
+        @click="$router.push('/')"
+        v-show="$route.path !== '/'"
+      >
         <i class="iconfont icon-shouye"></i>首页
       </div>
       <div class="avatar">
@@ -18,9 +22,12 @@
           <div class="avatarSpan">
             <el-avatar
               :size="25"
-              :src="$store.state.editAvatar.adminAvatar"
+              :src="$store.state.editAvatar.userAvatar"
             ></el-avatar>
-            <span>123<i class="el-icon-arrow-down el-icon--right"></i></span>
+            <span
+              >{{ $store.state.userName
+              }}<i class="el-icon-arrow-down el-icon--right"></i
+            ></span>
           </div>
 
           <el-dropdown-menu slot="dropdown" style="width: 180px">
@@ -35,11 +42,11 @@
               <el-avatar
                 class="bigAvatar"
                 :size="60"
-                :src="$store.state.editAvatar.adminAvatar"
+                :src="$store.state.editAvatar.userAvatar"
               ></el-avatar>
               <div class="right">
                 <div style="padding: 5px 0 0 0; margin-left: 5px">
-                  尊敬的用户
+                  {{ $store.state.userName }}
                 </div>
                 <div><i class="iconfont icon-huiyuan"></i>普通会员</div>
               </div>
@@ -90,7 +97,23 @@
 <script>
 export default {
   name: 'userHeader',
+  mounted() {
+    this.getAvatar()
+  },
   methods: {
+    async getAvatar() {
+      const { data: res } = await this.$http.get('/user/getAvatar', {
+        headers: {
+          Authorization: localStorage.getItem('userToken')
+        }
+      })
+      if (res.status === 200) {
+        this.$store.commit('editAvatar/userAvatar', res.data.avatar)
+        this.$store.state.userName = res.data.username || '尊敬的用户'
+        this.$store.state.userPhone = res.data.phone
+        // console.log(res)
+      }
+    },
     handleCommand(command) {
       // 个人中心
       if (command === 'binfo') {
@@ -111,7 +134,7 @@ export default {
               type: 'success',
               message: '退出成功!'
             })
-            // localStorage.removeItem('adminToken')
+            localStorage.removeItem('userToken')
             this.$router.push('/login')
           })
           .catch(() => {})

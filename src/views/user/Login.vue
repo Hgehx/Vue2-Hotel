@@ -23,8 +23,8 @@
         >
           <el-form-item label="" prop="username">
             <el-input
-              v-model="registerForm.username"
-              placeholder="请输入用户名"
+              v-model="registerForm.phone"
+              placeholder="请输入手机号"
             ></el-input>
           </el-form-item>
           <el-form-item label="" prop="password">
@@ -68,8 +68,8 @@
         >
           <el-form-item label="" prop="username">
             <el-input
-              v-model="loginForm.username"
-              placeholder="请输入用户名"
+              v-model="loginForm.phone"
+              placeholder="请输入手机号"
             ></el-input>
           </el-form-item>
           <el-form-item label="" prop="password">
@@ -101,27 +101,27 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '',
+        phone: '',
         password: ''
       },
       registerForm: {
-        username: '',
+        phone: '',
         password: '',
         repassword: ''
       },
       flag: 0,
       rules: {
-        username: [
-          { required: true, message: '请输出用户名', trigger: 'blur' },
-          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+        phone: [
+          { required: true, message: '请输入电话号码', trigger: 'blur' }
+          // { min: 11, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' }
+          // { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
         ],
         repassword: [
-          { required: true, message: '请输入确认密码', trigger: 'blur' },
-          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
+          { required: true, message: '请输入确认密码', trigger: 'blur' }
+          // { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' }
         ]
       }
     }
@@ -163,7 +163,7 @@ export default {
           } else {
             this.$http
               .post('/user/register', {
-                username: this.registerForm.username,
+                phone: this.registerForm.phone,
                 password: this.registerForm.password
               })
               .then(res => {
@@ -173,7 +173,7 @@ export default {
                     type: 'success'
                   })
                 } else {
-                  // 可以判断用户名是否有相同的
+                  // 可以判断手机号是否有相同的
                   this.$message.error(res.data.message)
                 }
               })
@@ -188,7 +188,7 @@ export default {
           this.$http
             .get('/user/login', {
               params: {
-                username: this.loginForm.username,
+                phone: this.loginForm.phone,
                 password: this.loginForm.password
               }
             })
@@ -198,7 +198,9 @@ export default {
                   message: '登录成功',
                   type: 'success'
                 })
-                this.$router.push('/home')
+                this.$router.push('/')
+                // console.log(res.data.token)
+                localStorage.setItem('userToken', res.data.token)
               } else {
                 this.$message.error('账号或密码错误')
               }

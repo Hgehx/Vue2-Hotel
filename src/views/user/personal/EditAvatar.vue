@@ -28,7 +28,7 @@
 
         <div class="right">
           <img
-            :src="photo ? photo : $store.state.editAvatar.adminAvatar"
+            :src="photo ? photo : $store.state.editAvatar.userAvatar"
             alt=""
             class="imgStyle"
           />
@@ -126,11 +126,11 @@ export default {
       })
         .then(() => {
           // 提交给状态管理vuex
-          this.$store.commit('editAvatar/adminAvatar', this.photo)
+          this.$store.commit('editAvatar/userAvatar', this.photo)
           // 获取当前管理员id 然后请求数据库，将头像数据更新
           this.$http
-            .patch('/admin/updateAvatar', {
-              aname: this.$store.state.adminName,
+            .patch('/user/updateAvatar', {
+              phone: this.$store.state.userPhone,
               avatar: this.photo
             })
             .then(res => {

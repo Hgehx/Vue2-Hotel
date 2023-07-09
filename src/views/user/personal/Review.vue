@@ -153,7 +153,7 @@ export default {
     async getUserRevi() {
       const { data: res } = await this.$http.get('/user/getUserRevi', {
         params: {
-          phone: '123'
+          phone: this.$store.state.userPhone
         }
       })
       // console.log(res)

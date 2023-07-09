@@ -86,20 +86,20 @@ export default {
   watch: {},
   mounted() {
     // 获取个人信息
-    this.getInfo()
+    // this.getInfo()
   },
   methods: {
     // 获取个人信息
-    async getInfo() {
-      const { data: res } = await this.$http.get('/admin/getInfo', {
-        headers: {
-          Authorization: localStorage.getItem('adminToken')
-        }
-      })
-      if (res.status === 200) {
-        this.ruleForm = res.data
-      }
-    },
+    // async getInfo() {
+    //   const { data: res } = await this.$http.get('/user/getInfo', {
+    //     headers: {
+    //       Authorization: localStorage.getItem('userToken')
+    //     }
+    //   })
+    //   if (res.status === 200) {
+    //     this.ruleForm = res.data
+    //   }
+    // },
     // 提交表单
     submitForm(formName) {
       this.$refs[formName].validate(async valid => {
@@ -112,14 +112,14 @@ export default {
             .then(async () => {
               const { oldPass, newPass } = this.ruleForm
               const { data: res } = await this.$http.patch(
-                '/admin/updatePwd',
+                '/user/updatePwd',
                 {
                   oldPass,
                   newPass
                 },
                 {
                   headers: {
-                    Authorization: localStorage.getItem('adminToken')
+                    Authorization: localStorage.getItem('userToken')
                   }
                 }
               )
@@ -128,8 +128,8 @@ export default {
                   message: '修改密码成功,请重新登录',
                   type: 'success'
                 })
-                localStorage.removeItem('adminToken')
-                this.$router.push('/admin/login')
+                localStorage.removeItem('userToken')
+                this.$router.push('/login')
               } else {
                 this.$message({
                   message: '旧密码不正确，请重新输入',

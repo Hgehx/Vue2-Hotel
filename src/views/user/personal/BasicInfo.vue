@@ -25,8 +25,8 @@
               <img class="avatarImage" :src="ruleForm.avatar" alt="" />
             </div>
           </el-form-item>
-          <el-form-item label="用户名" prop="aname">
-            <el-input v-model="ruleForm.aname" :readonly="true"></el-input>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="ruleForm.username" :readonly="true"></el-input>
           </el-form-item>
           <el-form-item label="电话" prop="phone">
             <el-input v-model="ruleForm.phone" :readonly="true"></el-input>
@@ -54,8 +54,8 @@
         style="width: 300px"
         :hide-required-asterisk="true"
       >
-        <el-form-item label="管理员名" prop="aname">
-          <el-input v-model="ruleForm.aname"></el-input>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="ruleForm.username"></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
           <el-input v-model="ruleForm.phone"></el-input>
@@ -80,14 +80,16 @@ export default {
       isShow: false,
       ruleForm: {
         id: 1,
-        aname: '',
+        username: '',
         phone: '',
         email: '',
         avatar: '',
         flag: 0
       },
       rules: {
-        aname: [{ required: true, message: '请输入管理员名', trigger: 'blur' }],
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
         phone: [{ required: true, message: '请输入电话', trigger: 'blur' }],
         email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }]
       }
@@ -95,7 +97,7 @@ export default {
   },
   // 监听器
   watch: {
-    'ruleForm.aname': function (newVal, oldVal) {
+    'ruleForm.phone': function (newVal, oldVal) {
       // console.log(newVal, oldVal)
       if (newVal === oldVal) {
         console.log(newVal, oldVal)
@@ -109,9 +111,9 @@ export default {
   methods: {
     // 获取个人信息
     async getInfo() {
-      const { data: res } = await this.$http.get('/admin/getInfo', {
+      const { data: res } = await this.$http.get('/user/getInfo', {
         headers: {
-          Authorization: localStorage.getItem('adminToken')
+          Authorization: localStorage.getItem('userToken')
         }
       })
       if (res.status === 200) {
@@ -121,7 +123,7 @@ export default {
     // 提交修改
     async onSubmit() {
       const { data: res } = await this.$http.patch(
-        '/admin/updateInfo',
+        '/user/updateInfo',
         this.ruleForm
       )
       if (res.status == 200) {
