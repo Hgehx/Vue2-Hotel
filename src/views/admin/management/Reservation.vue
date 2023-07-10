@@ -71,8 +71,18 @@
             <el-form-item label="客户名称">
               <el-input v-model="form.username"></el-input>
             </el-form-item>
-            <el-form-item label="订购房间类型">
+            <!-- <el-form-item label="订购房间类型">
               <el-input v-model="form.room_name"></el-input>
+            </el-form-item> -->
+            <el-form-item label="订购房间类型">
+              <el-select v-model="form.room_name" placeholder="请选择房间类型">
+                <el-option
+                  v-for="item in roomName"
+                  :key="item.id"
+                  :label="item.room_name"
+                  :value="item.room_name"
+                ></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="价格">
               <el-input v-model="form.price"></el-input>
@@ -150,6 +160,7 @@ export default {
       tableData: [], //表格数据
       centerDialogVisible: false, //隐藏显示弹出层
       form: {}, //弹出层表单
+      roomName: [],
       date: '',
       title: '', // 弹出层标题
       category: '', // 弹出层操作类型
@@ -169,6 +180,7 @@ export default {
   mounted() {
     // 获取预定信息表
     this.getResv()
+    this.getRoomName()
   },
 
   // 监听
@@ -179,7 +191,10 @@ export default {
       }
     },
     value(newVal) {
-      this.form.date = newVal[0] + ' ~ ' + newVal[1]
+      // 防止再次打开弹出层数据为undefined ~ undefined
+      if (newVal) {
+        this.form.date = newVal[0] + ' ~ ' + newVal[1]
+      }
     },
     // 对话框关闭刷新数据
     centerDialogVisible(newVal) {
@@ -188,6 +203,15 @@ export default {
         this.form = {}
       }
       // this.getResv()
+    },
+    'form.room_name': function (newRoomName) {
+      // 在这里进行相应的处理，例如修改 form.price 的值
+      const room = this.roomName.find(item => item.room_name === newRoomName)
+      if (room) {
+        this.form.price = room.price
+      } else {
+        return null // 如果找不到对应的房间信息，返回 null 或者其他合适的值
+      }
     }
   },
   methods: {
@@ -228,6 +252,17 @@ export default {
       // console.log(res)
       this.total = res.total
       this.tableData = res.data
+    },
+
+    // 获取客房名字和价格
+    async getRoomName() {
+      const { data: res } = await this.$http.get('/admin/getRoomName')
+      if (res.status === 200) {
+        this.roomName = res.data
+        console.log(this.roomName)
+      } else {
+        console.log('客房名字和价格获取失败')
+      }
     },
 
     // 改变第几页

@@ -168,7 +168,7 @@ export default {
     async getUserAvatar() {
       const { data: res } = await this.$http.get('/user/getUserAvatar', {
         params: {
-          phone: '123'
+          phone: this.$store.state.userPhone
         }
       })
       if (res.status === 200) {
@@ -217,7 +217,8 @@ export default {
               '/user/changeState',
               {
                 state: '已点评',
-                phone: this.boxForm.phone
+                phone: this.boxForm.phone,
+                date: this.boxForm.date
               }
             )
             if (resState.status === 200) {

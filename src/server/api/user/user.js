@@ -3,17 +3,6 @@ const jwt = require('jsonwebtoken')
 const { secret } = require('../token/key')
 const bcryptjs = require('bcryptjs')
 
-// 测试服务器请求mysql数据
-// exports.info = (req, res) => {
-//   let sql = `select * from user_info`
-//   db.query(sql, (err, data) => {
-//     if (err) {
-//       return res.send('错误：' + err.message)
-//     }
-//     res.send(data)
-//   })
-// }
-
 // 用户登录
 exports.login = (req, res) => {
   const { phone, password } = req.query
@@ -80,49 +69,6 @@ exports.register = (req, res) => {
       res.send({
         status: 202,
         message: '电话号码重复'
-      })
-    }
-  })
-}
-
-// 更新用户密码
-exports.updatePwd = (req, res) => {
-  const info = req.body
-  const sql = 'update user set password=? where id=?'
-  db.query(sql, [info.password, info.id], (err, data) => {
-    if (err) {
-      return res.send('错误：' + err.message)
-    }
-    if (data.affectedRows > 0) {
-      res.send({
-        status: 200,
-        message: 'success'
-      })
-    } else {
-      res.send({
-        status: 202,
-        message: '更新密码失败'
-      })
-    }
-  })
-}
-
-// 删除用户
-exports.deluser = (req, res) => {
-  const sql = 'DELETE FROM user WHERE id = ?;'
-  db.query(sql, req.body.id, (err, data) => {
-    if (err) {
-      return res.send('错误：' + err.message)
-    }
-    if (data.affectedRows > 0) {
-      res.send({
-        status: 200,
-        message: 'success'
-      })
-    } else {
-      res.send({
-        status: 202,
-        message: '更新密码失败'
       })
     }
   })

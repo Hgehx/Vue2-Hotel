@@ -87,7 +87,7 @@ exports.resvAdd = (req, res) => {
 // 删除数据
 exports.resvDel = (req, res) => {
   const user_revi =
-    'INSERT INTO user_revi (username,room_name,phone, date) SELECT username,room_name,phone, date FROM resv_management WHERE id=?;'
+    'INSERT INTO user_revi (username,room_name,phone, date) SELECT username,room_name,phone, date FROM resv_management WHERE id=? AND STR_TO_DATE(SUBSTRING_INDEX(date, " ~ ", -1), "%Y-%m-%d") < CURDATE();'
   db.query(user_revi, req.query.id, err => {
     if (err) {
       return res.send('错误：' + err.message)
@@ -116,6 +116,28 @@ exports.resvDel = (req, res) => {
 exports.resvUser = (req, res) => {
   const sql = 'select * from resv_management where username=?'
   db.query(sql, req.query.username, (err, data) => {
+    if (err) {
+      return res.send('错误：' + err.message)
+    }
+    if (data.length !== 0) {
+      res.send({
+        status: 200,
+        message: '查询成功',
+        data
+      })
+    } else {
+      res.send({
+        status: 201,
+        message: '查询失败'
+      })
+    }
+  })
+}
+
+// 获取客房类型
+exports.getRoomName = (req, res) => {
+  const sql = 'select * from room_management'
+  db.query(sql, (err, data) => {
     if (err) {
       return res.send('错误：' + err.message)
     }

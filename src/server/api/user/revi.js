@@ -60,23 +60,27 @@ exports.insertRevi = (req, res) => {
 
 // 改变点评状态
 exports.changeState = (req, res) => {
-  const sql = 'update user_revi set state=? where phone=?'
-  db.query(sql, [req.body.state, req.body.phone], (err, data) => {
-    if (err) {
-      return res.send('错误：' + err.message)
+  const sql = 'update user_revi set state=? where phone=? and date=?'
+  db.query(
+    sql,
+    [req.body.state, req.body.phone, req.body.date],
+    (err, data) => {
+      if (err) {
+        return res.send('错误：' + err.message)
+      }
+      if (data.affectedRows > 0) {
+        res.send({
+          status: 200,
+          message: '修改数据成功'
+        })
+      } else {
+        res.send({
+          status: 201,
+          message: '修改数据失败'
+        })
+      }
     }
-    if (data.affectedRows > 0) {
-      res.send({
-        status: 200,
-        message: '修改数据成功'
-      })
-    } else {
-      res.send({
-        status: 201,
-        message: '修改数据失败'
-      })
-    }
-  })
+  )
 }
 
 // 头像传递给用户点评表

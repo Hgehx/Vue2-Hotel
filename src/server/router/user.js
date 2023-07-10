@@ -3,11 +3,16 @@ const express = require('express')
 const router = express.Router()
 const user = require('../api/user/user')
 const revi = require('../api/user/revi')
+const resv = require('../api/user/resv')
 const personal = require('../api/user/personal')
 
 // 登录注册
 router.get('/login', user.login)
 router.post('/register', user.register)
+
+// 订单
+router.get('/resvInfo', resv.resvInfo)
+router.patch('/stateChange', resv.stateChange)
 
 // 个人信息
 router.get('/getInfo', personal.getInfo)

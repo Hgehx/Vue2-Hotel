@@ -31,7 +31,28 @@
 import Uheader from '@/components/user/Uheader.vue'
 import userMenu from '@/components/user/menu.vue'
 import Ufooter from '@/components/user/Ufooter'
-export default { name: 'userIndex', components: { Uheader, userMenu, Ufooter } }
+export default {
+  name: 'userIndex',
+  components: { Uheader, userMenu, Ufooter },
+  mounted() {
+    this.getAvatar()
+  },
+  methods: {
+    async getAvatar() {
+      const { data: res } = await this.$http.get('/user/getAvatar', {
+        headers: {
+          Authorization: localStorage.getItem('userToken')
+        }
+      })
+      if (res.status === 200) {
+        this.$store.commit('editAvatar/userAvatar', res.data.avatar)
+        this.$store.state.userName = res.data.username || '尊敬的用户'
+        this.$store.state.userPhone = res.data.phone
+        // console.log(res)
+      }
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

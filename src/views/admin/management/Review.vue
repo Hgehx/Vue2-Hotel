@@ -169,13 +169,13 @@ export default {
     noResponse() {
       // 筛选酒店回复内容为空的数据展示
       this.isShow = true
-      this.tableData = this.resData.filter(item => item.admin_reply === '')
+      this.tableData = this.resData.filter(item => item.admin_reply === null)
     },
 
     // 已回复
     replied() {
       this.isShow = true
-      this.tableData = this.resData.filter(item => item.admin_reply !== '')
+      this.tableData = this.resData.filter(item => item.admin_reply !== null)
     },
 
     // 右下角返回按钮

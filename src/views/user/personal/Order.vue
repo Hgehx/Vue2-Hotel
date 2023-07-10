@@ -11,6 +11,8 @@
           style="width: 100%"
           header-row-class-name="active-header"
         >
+          <el-table-column prop="username" label="用户名" align="center">
+          </el-table-column>
           <el-table-column
             prop="room_name"
             label="客房名称"
@@ -18,67 +20,20 @@
             align="center"
           >
           </el-table-column>
-          <el-table-column prop="room_info" label="介绍" align="center">
+          <el-table-column prop="date" label="入住日期" align="center">
+          </el-table-column>
+          <el-table-column prop="phone" label="电话" align="center">
+          </el-table-column>
+          <el-table-column prop="state" label="操作" align="center">
             <template slot-scope="scope">
-              {{ scope.row.room_info }}
-              <span
-                style="color: #409eff; cursor: pointer"
-                @click="moreIntroduction(scope.row)"
-                >更多></span
-              ></template
-            >
-          </el-table-column>
-          <el-table-column prop="" label="总额" align="center">
-            280
-          </el-table-column>
-          <el-table-column prop="" label="状态" align="center">
-            待入住
-          </el-table-column>
-          <el-table-column prop="room_name" label="操作" align="center">
-            <button
-              type="primary"
-              icon="el-icon-edit"
-              class="btn"
-              @click="handleEdit(scope.row)"
-            >
-              取消预定
-            </button>
+              <el-button class="btn" @click="handleEdit(scope.row)">
+                {{ scope.row.state }}
+              </el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
-      <!-- 分页 -->
-      <div class="block">
-        <div class="left">
-          <el-pagination
-            :page-size="pagesize"
-            @current-change="handleCurrentChange"
-            layout="total, prev, pager, next"
-            :total="total"
-          >
-          </el-pagination>
-        </div>
-      </div>
     </el-card>
-
-    <!-- 客房更多信息 -->
-    <el-dialog
-      title="更多信息"
-      :visible.sync="centerDialogVisible"
-      width="45%"
-      center
-    >
-      <span class="roomMore" v-html="roomMore.baseinfo"></span>
-      <h4>食品饮品</h4>
-      <span v-html="roomMore.foot"></span>
-      <h4>费用政策</h4>
-      <span v-html="roomMore.policy"></span>
-      <h4>便利设施</h4>
-      <span v-html="roomMore.facilities"></span>
-      <h4>洗浴配套</h4>
-      <span v-html="roomMore.bathroom"></span>
-      <h4>洗浴用品</h4>
-      <span v-html="roomMore.bathing"></span>
-    </el-dialog>
   </div>
 </template>
 
@@ -88,72 +43,106 @@ export default {
   components: {},
   data() {
     return {
-      centerDialogVisible: false,
       tableData: [], //表格数据
-      form: {}, //表单
-      pagenum: 1,
-      pagesize: 3,
-      total: 0, //数据总条数
-      roomMore: {
-        baseinfo: '', //更多信息
-        bathing: '',
-        bathroom: '',
-        facilities: '',
-        foot: '',
-        policy: ''
-      }
+      state: '取消'
     }
   },
   mounted() {
     // 获取预定信息表
-    this.getRoom()
+    this.getResvInfo()
   },
 
   // 监听
   watch: {},
   methods: {
-    // 获取预定信息数据
-    async getRoom() {
-      const { data: res } = await this.$http.get('/admin/roomInfo', {
+    // 获取用户预定信息数据
+    async getResvInfo() {
+      const { data: res } = await this.$http.get('/user/resvInfo', {
         params: {
-          pagenum: this.pagenum,
-          pagesize: this.pagesize
+          phone: this.$store.state.userPhone
         }
       })
       // console.log(res)
-      this.total = res.total
-      this.$store.commit('editRoom/aroomTotal', this.total)
       this.tableData = res.data
+      this.tableData.forEach(item => {
+        console.log('mounted() is called') // 添加这一行进行调试
+        this.stateChange(item.date) // 根据每个数据项的日期调用 stateChange() 方法
+      })
     },
 
-    // 更多介绍
-    async moreIntroduction(row) {
-      // this.$store.commit('editRoom/aroomMid', row.room_id)
-      console.log(row.room_id)
-      this.centerDialogVisible = true
-      const { data: res } = await this.$http.get('/admin/idMore', {
-        params: {
-          room_id: row.room_id
+    // 判断状态
+    async stateChange(date) {
+      console.log(date)
+      const currentDate = new Date()
+      // 提取入住日期
+      if (date) {
+        const extractedDate1 = new Date(date.split(' ~ ')[0])
+        const extractedDate2 = new Date(date.split(' ~ ')[1])
+        // 将时间部分设置为 00:00:00
+        currentDate.setHours(0, 0, 0, 0)
+        if (currentDate >= extractedDate1 && currentDate <= extractedDate2) {
+          // 当前时间在入住时间内
+          this.state = '联系客服'
+        } else if (currentDate < extractedDate1) {
+          // 当前时间没到入住时间
+          this.state = '取消预定'
+        } else if (currentDate > extractedDate2) {
+          // 当前时间超过了退房时间
+          this.state = '点评'
         }
+      }
+      const { data: res } = await this.$http.patch('/user/stateChange', {
+        phone: this.$store.state.userPhone,
+        state: this.state,
+        date
       })
       if (res.status === 200) {
-        console.log(res.data[0])
-        this.roomMore = res.data[0]
-      } else {
         console.log(res)
       }
     },
-
-    // 改变第几页
-    handleCurrentChange(val) {
-      this.pagenum = val
-      this.getRoom()
-    },
-
-    // 预定
     handleEdit(row) {
-      console.log(row)
-      this.$router.push('/resv')
+      if (row.state === '点评') {
+        this.$router.push('/personal/review')
+      }
+      if (row.state === '取消预定') {
+        // 预定表单中删除用户信息
+        this.$confirm('确定取消预定吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(async () => {
+            // 删除数据
+            const { data: resdel } = await this.$http.delete('/admin/resvDel', {
+              params: {
+                id: row.id
+              }
+            })
+
+            //  // 退房， 对客房数量+1
+            const { data: resnum } = await this.$http.patch(
+              '/admin/updateNum',
+              {
+                room_name: row.room_name,
+                operation: 'add'
+              }
+            )
+
+            if (resdel.status === 200 && resnum.status === 200) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.getResvInfo()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '删除失败'
+              })
+            }
+          })
+          .catch(() => {})
+      }
     }
   }
 }
@@ -178,18 +167,18 @@ export default {
         margin-right: 10px;
       }
     }
-    .btn {
-      width: 80px;
-      height: 40px;
-      line-height: 40px;
-      margin-right: 10px;
-      border: none;
-      background-color: #f56c6c;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      border-radius: 5px;
-    }
+    // .btn {
+    //   width: 80px;
+    //   height: 40px;
+    //   line-height: 40px;
+    //   margin-right: 10px;
+    //   border: none;
+    //   background-color: #f56c6c;
+    //   color: #fff;
+    //   font-size: 16px;
+    //   font-weight: 700;
+    //   border-radius: 5px;
+    // }
   }
   .roomMore {
     /deep/.iconfont {

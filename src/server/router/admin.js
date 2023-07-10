@@ -17,6 +17,7 @@ router.patch('/resvUpdate', resv.resvUpdate) //修改
 router.post('/resvAdd', resv.resvAdd) //新增
 router.delete('/resvDel', resv.resvDel) //删除
 router.get('/resvUser', resv.resvUser) //查询指定客户信息
+router.get('/getRoomName', resv.getRoomName) //查询客房名称和价格
 
 // 客房信息管理
 router.get('/roomInfo', room.roomInfo) //分页获取数据
